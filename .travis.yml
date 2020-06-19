@@ -1,0 +1,11 @@
+language: java
+jdk:
+- openjdk9
+
+addons:
+ sonarcloud: 
+  organization: alefanfi
+  token: bd6caffcd884caabd0ef92670ed66a10d450a997
+script:
+- ant build
+- sonar-scanner
