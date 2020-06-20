@@ -27,8 +27,6 @@ public class WalkForward {
 	
 	public static List<Integer> walkForwardTraining(String project, int release, String path) throws IOException{
 		
-		int countBuggy = 0;
-		int count = 0;
 		List<Integer> result = new ArrayList<>();
 		
 		//create file output
@@ -49,43 +47,9 @@ public class WalkForward {
 			printer.append("@attribute ChgSetSize numeric\n");
 			printer.append("@attribute Buggy {Si, No}\n");
 			printer.append("@data\n");
+
 			
-			String line = null;
-			
-			try(BufferedReader br = new BufferedReader(new FileReader(path))){
-			
-			
-				while((line =br.readLine()) != null) {
-					
-					if(line.split(";")[0] == null || line.split(";")[0].startsWith("Release")) {
-						
-						continue;
-					}
-					
-					if(Integer.parseInt(line.split(";")[0]) <= release) {
-						
-						count++;
-						
-						countBuggy = countBuggy + addLine(printer, line);
-						
-					}
-					
-					
-				}
-				
-				br.close();
-			
-			}catch(Exception e) {
-				
-				LOGGER.log(Level.SEVERE, "[ERROR]", e);
-				
-				}
-			
-			result.add(count);
-			result.add(countBuggy);
-			
-			printer.flush();	
-			
+			openOldFile(path, printer, release, result, true);
 			
 		} catch(Exception e) {
 			
@@ -97,12 +61,65 @@ public class WalkForward {
 		
 	}
 	
-	/*This function returns the result for the testing part*/
-	
-	public static List<Integer> walkForwardTesting(String project, int release, String path) {
+	private static void openOldFile(String path, PrintStream printer, int release, List<Integer> result, boolean t) {
+		
+		String line = null;
 		
 		int countBuggy = 0;
 		int count = 0;
+		
+		try(BufferedReader br = new BufferedReader(new FileReader(path))){
+			
+			
+			while((line =br.readLine()) != null) {
+				
+				if(line.split(";")[0] == null || line.split(";")[0].startsWith("Release")) {
+					
+					continue;
+				}
+				
+				if(t) {
+					
+					if(Integer.parseInt(line.split(";")[0]) <= release) {
+						
+						count++;
+						
+						countBuggy = countBuggy + addLine(printer, line);
+						
+					}
+					
+				}else {
+					
+					if(Integer.parseInt(line.split(";")[0]) == release) {
+						
+						count++;
+						
+						countBuggy = countBuggy + addLine(printer, line);
+						
+					}
+				}
+					
+			}
+			
+			br.close();
+			
+			result.add(count);
+			result.add(countBuggy);
+			
+			printer.flush();	
+		
+		}catch(Exception e) {
+			
+			LOGGER.log(Level.SEVERE, "[ERROR]", e);
+			
+			}
+		
+	}
+	
+	/*This function returns the result for the testing part*/
+
+	public static List<Integer> walkForwardTesting(String project, int release, String path) {
+
 		List<Integer> result = new ArrayList<>();
 		
 		//create file output
@@ -124,38 +141,8 @@ public class WalkForward {
 			printer2.append("@attribute Buggy {Si, No}\n");
 			printer2.append("@data\n");
 			
-			String line = null;
 			
-			try(BufferedReader br = new BufferedReader(new FileReader(path))){
-			
-				while((line =br.readLine()) != null) {
-					
-					if(line.split(";")[0] == null || line.split(";")[0].startsWith("Release")) {
-						
-						continue;
-					}
-					
-					if(Integer.parseInt(line.split(";")[0]) == release) {
-						
-						count++;
-						
-						countBuggy = countBuggy + addLine(printer2, line);
-						
-					}
-					
-					
-				}
-			
-			}catch(Exception e) {
-					
-				LOGGER.log(Level.SEVERE, "[ERROR]", e);
-
-			}
-			
-			result.add(count);
-			result.add(countBuggy);
-			
-			printer2.flush();	
+			openOldFile(path, printer2, release, result, true);
 		
 		} catch(Exception e) {
 					
