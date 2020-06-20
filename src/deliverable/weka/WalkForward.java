@@ -31,8 +31,6 @@ public class WalkForward {
 		int count = 0;
 		List<Integer> result = new ArrayList<>();
 		
-		BufferedReader br;
-		
 		//create file output
 		
 		String outname = project + "Training.arff";
@@ -54,26 +52,34 @@ public class WalkForward {
 			
 			String line = null;
 			
-			br = new BufferedReader(new FileReader(path));
+			try(BufferedReader br = new BufferedReader(new FileReader(path))){
 			
-			while((line =br.readLine()) != null) {
-				
-				if(line.split(";")[0] == null || line.split(";")[0].startsWith("Release")) {
+			
+				while((line =br.readLine()) != null) {
 					
-					continue;
+					if(line.split(";")[0] == null || line.split(";")[0].startsWith("Release")) {
+						
+						continue;
+					}
+					
+					if(Integer.parseInt(line.split(";")[0]) <= release) {
+						
+						count++;
+						
+						countBuggy = countBuggy + addLine(printer, line);
+						
+					}
+					
+					
 				}
 				
-				if(Integer.parseInt(line.split(";")[0]) <= release) {
-					
-					count++;
-					
-					countBuggy = countBuggy + addLine(printer, line);
-					
+				br.close();
+			
+			}catch(Exception e) {
+				
+				LOGGER.log(Level.SEVERE, "[ERROR]", e);
+				
 				}
-				
-				
-			}
-			br.close();
 			
 			result.add(count);
 			result.add(countBuggy);
@@ -99,8 +105,6 @@ public class WalkForward {
 		int count = 0;
 		List<Integer> result = new ArrayList<>();
 		
-		BufferedReader br;
-
 		//create file output
 	
 		String outname = project + "Testing.arff";
@@ -122,27 +126,31 @@ public class WalkForward {
 			
 			String line = null;
 			
-			br = new BufferedReader(new FileReader(path));
+			try(BufferedReader br = new BufferedReader(new FileReader(path))){
 			
-			while((line =br.readLine()) != null) {
-				
-				if(line.split(";")[0] == null || line.split(";")[0].startsWith("Release")) {
+				while((line =br.readLine()) != null) {
 					
-					continue;
+					if(line.split(";")[0] == null || line.split(";")[0].startsWith("Release")) {
+						
+						continue;
+					}
+					
+					if(Integer.parseInt(line.split(";")[0]) == release) {
+						
+						count++;
+						
+						countBuggy = countBuggy + addLine(printer2, line);
+						
+					}
+					
+					
 				}
-				
-				if(Integer.parseInt(line.split(";")[0]) == release) {
+			
+			}catch(Exception e) {
 					
-					count++;
-					
-					countBuggy = countBuggy + addLine(printer2, line);
-					
-				}
-				
-				
+				LOGGER.log(Level.SEVERE, "[ERROR]", e);
+
 			}
-			
-			br.close();
 			
 			result.add(count);
 			result.add(countBuggy);
