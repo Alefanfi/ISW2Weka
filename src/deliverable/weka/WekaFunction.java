@@ -5,21 +5,19 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import weka.core.Instances;
 import weka.attributeSelection.CfsSubsetEval;
 import weka.attributeSelection.GreedyStepwise;
-import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.lazy.IBk;
 import weka.classifiers.meta.FilteredClassifier;
 import weka.classifiers.trees.RandomForest;
+import weka.core.Instances;
 import weka.filters.Filter;
 import weka.filters.supervised.attribute.AttributeSelection;
 import weka.filters.supervised.instance.Resample;
 import weka.filters.supervised.instance.SMOTE;
 import weka.filters.supervised.instance.SpreadSubsample;
-
 
 public final class WekaFunction {
 	
@@ -46,25 +44,17 @@ public final class WekaFunction {
 		
 		try {
 			
-			//specify the dataset
 			filter.setInputFormat(training);
-			
-			//apply
-			Instances filteredTraining = Filter.useFilter(training, filter);
-			
+			Instances filteredTraining =  Filter.useFilter(training, filter);
 			Instances testingFiltered = Filter.useFilter(testing, filter);
-			
 			int numAttrFiltered = filteredTraining.numAttributes();
 			filteredTraining.setClassIndex(numAttrFiltered - 1);
 			testingFiltered.setClassIndex(numAttrFiltered - 1);
 			
-		
 		}catch(Exception e) {
 			
 			LOGGER.log(Level.SEVERE, "[ERROR]", e);
 			
-			System.out.println("!4545");
-		
 		}
 		
 		return applySampling(training, testing, percentClass, sampling, "Yes");
@@ -72,7 +62,7 @@ public final class WekaFunction {
 	}
 	
 	public static List<String> applySampling(Instances training, Instances testing, float percentClass, String sampling, String featureSelection) throws Exception {
-		
+
 		List<String> samplingResult = new ArrayList<>();
 	
 		int numAttr = training.numAttributes();
@@ -112,15 +102,15 @@ public final class WekaFunction {
 				eval = new Evaluation(testing);
 				
 				eval.evaluateModel(cIBK, testing);
-				result = setResult(cIBK, sampling, featureSelection, eval);
+				result = setResult("IBK", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				eval.evaluateModel(RandomForest, testing);
-				result = setResult(RandomForest, sampling, featureSelection, eval);
+				result = setResult("RandomForest", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				eval.evaluateModel(NaiveBaye, testing);
-				result = setResult(NaiveBaye, sampling, featureSelection, eval);
+				result = setResult("NaiveBaye", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				break;
@@ -128,6 +118,8 @@ public final class WekaFunction {
 			case "OVERSAMPLING":
 			
 				/*Apply OVERSAMPLING*/
+				
+				FilteredClassifier overSamplingfc = new FilteredClassifier();
 				
 				eval = new Evaluation(testing);
 				fc = new FilteredClassifier();
@@ -137,27 +129,30 @@ public final class WekaFunction {
 				fc.setFilter(resample);
 				
 				/*Evaluation of IBK classifier*/
-				
+
+				eval = new Evaluation(testing);
 				fc.setClassifier(cIBK);
 				fc.buildClassifier(training);
 				eval.evaluateModel(fc, testing);
-				result = setResult(cIBK, sampling, featureSelection, eval);
+				result = setResult("IBK", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				/*Evaluation of RandomForest classifier*/
 				
-				fc.setClassifier(RandomForest);
-				fc.buildClassifier(training);
-				eval.evaluateModel(fc, testing);
-				result = setResult(RandomForest, sampling, featureSelection, eval);
+				eval = new Evaluation(testing);
+				overSamplingfc.setClassifier(RandomForest);
+				overSamplingfc.buildClassifier(training);
+				eval.evaluateModel(overSamplingfc, testing);
+				result = setResult("RandomForest", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				/*Evaluation of NaiveBaye classifier*/
-				
+
+				eval = new Evaluation(testing);
 				fc.setClassifier(NaiveBaye);
 				fc.buildClassifier(training);
 				eval.evaluateModel(fc, testing);
-				result = setResult(NaiveBaye, sampling, featureSelection, eval);
+				result = setResult("NaiveBaye", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				break;
@@ -167,7 +162,7 @@ public final class WekaFunction {
 				
 				/*Apply UNDERSAMPLING*/
 				
-				eval = new Evaluation(training);
+				eval = new Evaluation(testing);
 				fc = new FilteredClassifier();
 				SpreadSubsample  spreadSubsample = new SpreadSubsample();
 				spreadSubsample.setInputFormat(training);
@@ -176,34 +171,38 @@ public final class WekaFunction {
 				fc.setFilter(spreadSubsample);
 				
 				/*Evaluation of IBK classifier*/
-				
+
+				eval = new Evaluation(testing);
 				fc.setClassifier(cIBK);
 				fc.buildClassifier(training);
 				eval.evaluateModel(fc, testing);
-				result = setResult(cIBK, sampling, featureSelection, eval);
+				result = setResult("IBK", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				/*Evaluation of RandomForest classifier*/
-				
+
+				eval = new Evaluation(testing);
 				fc.setClassifier(RandomForest);
 				fc.buildClassifier(training);
 				eval.evaluateModel(fc, testing);
-				result = setResult(RandomForest, sampling, featureSelection, eval);
+				result = setResult("RandomForest", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				/*Evaluation of NaiveBaye classifier*/
-				
+
+				eval = new Evaluation(testing);
 				fc.setClassifier(NaiveBaye);
 				fc.buildClassifier(training);
 				eval.evaluateModel(fc, testing);
-				result = setResult(NaiveBaye, sampling, featureSelection, eval);
+				result = setResult("NaiveBaye", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				break;
 			
 			case "SMOTE":
-			
+
 				/*SMOTE*/
+				
 				eval = new Evaluation(testing);
 				SMOTE smote = new SMOTE();
 				fc = new FilteredClassifier();
@@ -211,27 +210,30 @@ public final class WekaFunction {
 				fc.setFilter(smote);
 	
 				/*Evaluation of IBK classifier*/
-				
+
+				eval = new Evaluation(testing);
 				fc.setClassifier(cIBK);
 				fc.buildClassifier(training);			   
 				eval.evaluateModel(fc, testing);
-				result = setResult(cIBK, sampling, featureSelection, eval);
+				result = setResult("IBK", sampling, featureSelection, eval);
 				samplingResult.add(result);
 			   
 				/*Evaluation of RandomForest classifier*/
 
+				eval = new Evaluation(testing);
 				fc.setClassifier(RandomForest);
 				fc.buildClassifier(training);
 				eval.evaluateModel(fc, testing);
-				result = setResult(RandomForest, sampling, featureSelection, eval);
+				result = setResult("RandomForest", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				/*Evaluation of NaiveBaye classifier*/
-							   
+
+				eval = new Evaluation(testing);
 				fc.setClassifier(NaiveBaye);			   
 				fc.buildClassifier(training);			   
 				eval.evaluateModel(fc, testing);
-				result = setResult(NaiveBaye, sampling, featureSelection, eval);
+				result = setResult("NaiveBaye", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				break;
@@ -240,18 +242,26 @@ public final class WekaFunction {
 	   return samplingResult;
 	}
 	
-	public static String setResult(Classifier fc, String sampling, String featureSelection, Evaluation eval) {
+	public static String setResult(String fc, String sampling, String featureSelection, Evaluation eval) {
 		
-		String result;
+		String result = null;
 		
-		if(featureSelection.compareTo("Yes")==0) {
+		switch(featureSelection) {
+		
+		case "Yes":
+			
 			result = fc + ";" + sampling + ";" + featureSelection + ";" + 
 					eval.numTruePositives(1)  + ";" + eval.numFalsePositives(1)  + "," + eval.numTrueNegatives(1)  + ";" + eval.numFalseNegatives(1)  + ";" +
 					eval.precision(1)  + ";" + eval.recall(1)  + ";" + eval.areaUnderROC(1)  + ";" + eval.kappa() + "\n";
-		}else {
+			
+			break;
+		
+		case "No":
+			
 			result = fc + ";" + sampling + ";" + featureSelection + ";" + 
 					eval.numTruePositives(1)  + ";" + eval.numFalsePositives(1)  + "," + eval.numTrueNegatives(1)  + ";" + eval.numFalseNegatives(1)  + ";" +
 					eval.precision(1)  + ";" + eval.recall(1)  + ";" + eval.areaUnderROC(1)  + ";" + eval.kappa() + "\n";
+			break;
 		}
 		
 		return result;

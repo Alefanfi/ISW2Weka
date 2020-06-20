@@ -73,11 +73,13 @@ public class WalkForward {
 				
 				
 			}
+			br.close();
 			
 			result.add(count);
 			result.add(countBuggy);
 			
 			printer.flush();	
+			
 			
 		} catch(Exception e) {
 			
@@ -129,7 +131,7 @@ public class WalkForward {
 					continue;
 				}
 				
-				if(Integer.parseInt(line.split(";")[0]) <= release) {
+				if(Integer.parseInt(line.split(";")[0]) == release) {
 					
 					count++;
 					
@@ -140,6 +142,7 @@ public class WalkForward {
 				
 			}
 			
+			br.close();
 			
 			result.add(count);
 			result.add(countBuggy);

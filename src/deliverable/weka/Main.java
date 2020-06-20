@@ -25,10 +25,8 @@ public class Main {
 	
 		//Read the csv and take the release number of the project
 		
-		try {
-			
-			Scanner sc = new Scanner(new File(pathFile));
-			
+		try(Scanner sc = new Scanner(new File(pathFile))){
+				
 			sc.useDelimiter("\n");
 			
 			while(sc.hasNext()) {

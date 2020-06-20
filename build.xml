@@ -10,13 +10,15 @@
     <property name="source" value="9"/>
     <path id="ISW2Weka.classpath">
         <pathelement location="bin"/>
-        <pathelement location="SMOTE.jar"/>
-        <pathelement location="weka.jar"/>
+        <pathelement location="lib/SMOTE.jar"/>
+        <pathelement location="lib/weka-src.jar"/>
+        <pathelement location="lib/weka.jar"/>
     </path>
     <path id="run.Main (10).classpath">
         <path refid="ISW2Weka.classpath"/>
-        <pathelement location="SMOTE.jar"/>
-        <pathelement location="weka.jar"/>
+        <pathelement location="lib/SMOTE.jar"/>
+        <pathelement location="lib/weka-src.jar"/>
+        <pathelement location="lib/weka.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>

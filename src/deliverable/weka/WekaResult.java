@@ -53,7 +53,7 @@ public class WekaResult {
 				float defectiveTesting = resultTesting.get(1)/(float)resultTesting.get(0);
 				float defectiveTraining = resultTraining.get(1)/(float)resultTraining.get(0);
 				
-				float percentClass = 0; //CAPIRE IL VALORE DA METTERE 			
+				float percentClass = 1 - ( (resultTraining.get(1) + resultTesting.get(1)) / (float)(resultTraining.get(0) + resultTesting.get(0)));		
 				
 				// Create the ARFF file for the training, till the i-th version
 				DataSource source2 = new DataSource(project + "Testing.arff");
@@ -101,6 +101,7 @@ public class WekaResult {
 		for(int j = 0; j < result.size(); j++) {
 			
 			String newResult = project + ";" + i + ";" + trainingPerc + ";" + defectiveTraining + ";" + defectiveTesting + ";" + result.get(j);
+			
 			printer.append(newResult);
 		}
 		
