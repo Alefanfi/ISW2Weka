@@ -237,11 +237,16 @@ public final class WekaFunction {
 				samplingResult.add(result);
 				
 				break;
+				
+			default:
+			    
+				break;
+			
 		}
 		
 	   return samplingResult;
-	}
 	
+	}
 
 
 	public static String setResult(String fc, String sampling, String featureSelection, Evaluation eval) {

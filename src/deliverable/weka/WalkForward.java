@@ -3,7 +3,6 @@ package deliverable.weka;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,7 @@ public class WalkForward {
 	
 	private static final Logger LOGGER = Logger.getLogger(WalkForward.class.getName());
 	
-	private static final String strError = "[ERROR]";
+	private static final String errore = "[ERROR]";
 
 	/* In walk-forward, the dataset is divided into parts
 	 * 
@@ -55,7 +54,7 @@ public class WalkForward {
 			
 		} catch(Exception e) {
 			
-		LOGGER.log(Level.SEVERE, strError, e);
+		LOGGER.log(Level.SEVERE, errore, e);
 		
 		}
 		
@@ -110,7 +109,7 @@ public class WalkForward {
 		
 		}catch(Exception e) {
 			
-			LOGGER.log(Level.SEVERE, strError, e);
+			LOGGER.log(Level.SEVERE, errore, e);
 			
 			}
 		
@@ -146,7 +145,7 @@ public class WalkForward {
 		
 		} catch(Exception e) {
 					
-			LOGGER.log(Level.SEVERE, strError, e);
+			LOGGER.log(Level.SEVERE, errore, e);
 				
 		}	
 		
@@ -155,7 +154,7 @@ public class WalkForward {
 	}
 	
 	
-	public static int addLine(PrintStream file, String line) throws IOException {
+	public static int addLine(PrintStream file, String line){
 		
 		int countBuggy = 0;
 		

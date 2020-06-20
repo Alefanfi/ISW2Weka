@@ -27,7 +27,7 @@ public class WekaResult {
 	
 	private WekaResult() {}
 	
-	public static void printResult(String project, List<String> release, String path) throws Exception {
+	public static void printResult(String project, List<String> release, String path) {
 		
 		resultTraining = new ArrayList<>();
 		resultTesting = new ArrayList<>();
