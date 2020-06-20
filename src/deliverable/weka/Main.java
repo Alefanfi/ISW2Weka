@@ -1,15 +1,12 @@
 package deliverable.weka;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import weka.core.Instances;
-import weka.core.converters.ConverterUtils.DataSource;
 
 import util.PropertiesUtils;
 import util.ReadPropertyFile;
@@ -18,26 +15,31 @@ public class Main {
 	
 	private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 	
-	static List <Integer> release = null;
+	static List <String> release = new ArrayList<>();
 	
 	public static void main(String[] args) throws Exception {
 		
 		String project = PropertiesUtils.getProperty(ReadPropertyFile.PROJECT);
+		
+		String pathFile = PropertiesUtils.getProperty(ReadPropertyFile.PATH);
 	
 		//Read the csv and take the release number of the project
 		
-		try(BufferedReader br = new BufferedReader(new FileReader("result/" + project + "DatasetInfo.csv"))) {
+		try {
 			
-			String line = br.readLine();
+			Scanner sc = new Scanner(new File(pathFile));
 			
-			while(line != null) {
+			sc.useDelimiter("\n");
 			
-				if(release.contains(Integer.parseInt(line.split(";")[0]))) {
+			while(sc.hasNext()) {
+				
+				if(!release.contains(sc.next().split(";")[0])) {
 					
-					release.add(Integer.parseInt(line.split(";")[0]));
+					release.add(sc.next().split(";")[0]);
 				}
-			
 			}
+			
+			sc.close();
 			
 		}catch(Exception e) {
 				
@@ -45,27 +47,7 @@ public class Main {
 			
 		}
 		
-		for(int i = 0; i<release.size(); i++) {
-			
-			int releaseLimit = release.get(i);
-			
-			//For testing and traning get the number of buggy/no buggy 
-			WalkForward.walkForwardTraning(project, releaseLimit);
-			WalkForward.walkForwardTesting(project);
-			
-			// Create the ARFF file for the training, till the i-th version
-			DataSource source2 = new DataSource(project + "Training.arrf");
-			Instances testingNoFilter = source2.getDataSet();
-			
-			// Create the ARFF file for testing, with the i+1 version
-			DataSource source = new DataSource(project + "Testing.arrf");
-			Instances noFilterTraining = source.getDataSet();
-			
-			
-			
-			
-
-		}
+		WekaResult.printResult(project, release, pathFile);
 		
 	}
 

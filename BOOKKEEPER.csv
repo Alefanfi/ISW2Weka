@@ -1,0 +1,70 @@
+Dataset; #Training; %Training; %DefectTraining; %DefectTesting; Classifier; Balancing; FeatureSelection; TP; FP; TN; FN; Precision; Recall; ROC Area; Kappa
+BOOKKEEPER;0;0.5;0.33222592;0.33222592;IB1 instance-based classifier
+using 1 nearest neighbour(s) for classification
+;NO SAMPLING;Yes;199.0;0.0,100.0;2.0;1.0;0.9900497512437811;0.9999004975124378;0.9850997475372505
+BOOKKEEPER;0;0.5;0.33222592;0.33222592;RandomForest
+
+Bagging with 100 iterations and base learner
+
+weka.classifiers.trees.RandomTree -K 0 -M 1.0 -V 0.001 -S 1 -do-not-check-capabilities;NO SAMPLING;Yes;400.0;2.0,198.0;2.0;0.9950248756218906;0.9950248756218906;0.9999004975124378;0.9850248756218905
+BOOKKEEPER;0;0.5;0.33222592;0.33222592;Naive Bayes Classifier
+
+                  Class
+Attribute            Si       No
+                 (0.33)   (0.67)
+=================================
+Size
+  mean          228.7894 143.1189
+  std. dev.     210.2238 456.5136
+  weight sum         100      201
+  precision      33.6455  33.6455
+
+LocTouched
+  mean          238.8384 226.8479
+  std. dev.     277.46051291.3193
+  weight sum         100      201
+  precision      98.6935  98.6935
+
+LocAdded
+  mean          195.9509  185.816
+  std. dev.     215.2882 870.7497
+  weight sum         100      201
+  precision      65.7553  65.7553
+
+MaxLocAdded
+  mean          162.5171 147.0879
+  std. dev.     175.3329 451.0851
+  weight sum         100      201
+  precision      35.4068  35.4068
+
+AvgLocAdded
+  mean           63.4295 119.9164
+  std. dev.      77.9833 445.6136
+  weight sum         100      201
+  precision      26.9913  26.9913
+
+nAuth
+  mean               2.2    1.597
+  std. dev.       0.7071   0.6555
+  weight sum         100      201
+  precision            1        1
+
+nFix
+  mean              1.08        0
+  std. dev.        1.469   0.2222
+  weight sum         100      201
+  precision       1.3333   1.3333
+
+nR
+  mean            4.2033   2.1182
+  std. dev.       2.6148   1.3204
+  weight sum         100      201
+  precision       1.0833   1.0833
+
+ChgSetSize
+  mean          322.6508 277.8389
+  std. dev.     159.7627 112.4794
+  weight sum         100      201
+  precision       7.1892   7.1892
+
+;NO SAMPLING;Yes;415.0;8.0,292.0;188.0;0.9810874704491725;0.6882255389718076;0.9281066887783306;0.5748955180861794

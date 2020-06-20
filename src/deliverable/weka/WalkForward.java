@@ -5,8 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
-
+import java.util.ArrayList;
 import java.util.List;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,8 +16,6 @@ public class WalkForward {
 	private WalkForward() {}
 	
 	private static final Logger LOGGER = Logger.getLogger(WalkForward.class.getName());
-	
-	private static BufferedReader bufferedReader;
 
 	/* In walk-forward, the dataset is divided into parts
 	 * 
@@ -26,22 +25,21 @@ public class WalkForward {
 	 *  
 	 *  This function returns the result for the training part and get the number of buggy/no buggy */
 	
-	public static List<Integer> walkForwardTraning(String project, int release) throws IOException{
+	public static List<Integer> walkForwardTraining(String project, int release, String path) throws IOException{
 		
 		int countBuggy = 0;
 		int count = 0;
-		List<Integer> result = null;
+		List<Integer> result = new ArrayList<>();
+		
+		BufferedReader br;
 		
 		//create file output
 		
-		String outname = project + "Training.arrf";
+		String outname = project + "Training.arff";
 		
 		try(PrintStream printer = new PrintStream(new File(outname))){
 			
-			printer.println("Dataset, #Training, %Training, %Defect Training, %Defect Testing, Classifier, Balancing, FeatureSelection, TP, FP, TN, FN, Precision, "
-					+ "Recall, ROC Area, Kappa");
-			
-			printer.append("@relation " + project + "\n\n");
+			printer.append("@relation " + project + "\n");
 			printer.append("@attribute Size numeric\n");
 			printer.append("@attribute LocTouched numeric\n");
 			printer.append("@attribute LocAdded numeric\n");
@@ -51,30 +49,29 @@ public class WalkForward {
 			printer.append("@attribute nFix numeric\n");
 			printer.append("@attribute nR numeric\n");
 			printer.append("@attribute ChgSetSize numeric\n");
-			printer.append("@attribute Buggy {Yes, No}\n\n");
+			printer.append("@attribute Buggy {Si, No}\n");
 			printer.append("@data\n");
 			
-			bufferedReader = new BufferedReader(new FileReader("result/" + project + "Training.arrf"));
+			String line = null;
 			
-			String line = bufferedReader.readLine();
+			br = new BufferedReader(new FileReader(path));
 			
-			while(line != null) {
+			while((line =br.readLine()) != null) {
+				
+				if(line.split(";")[0] == null || line.split(";")[0].startsWith("Release")) {
+					
+					continue;
+				}
 				
 				if(Integer.parseInt(line.split(";")[0]) <= release) {
-				
+					
 					count++;
 					
-					if(line.contains("Yes")) {
-					
-						countBuggy ++;
-						
-						//Add line for a buggy
-						
-						printer.append(line);
-					}
+					countBuggy = countBuggy + addLine(printer, line);
 					
 				}
-			
+				
+				
 			}
 			
 			result.add(count);
@@ -94,46 +91,96 @@ public class WalkForward {
 	
 	/*This function returns the result for the testing part*/
 	
-	public static void walkForwardTesting(String project) {
+	public static List<Integer> walkForwardTesting(String project, int release, String path) {
 		
+		int countBuggy = 0;
+		int count = 0;
+		List<Integer> result = new ArrayList<>();
+		
+		BufferedReader br;
+
 		//create file output
 	
-		String outname = project + "Training.arrf";
+		String outname = project + "Testing.arff";
 						
-		try(PrintStream printer = new PrintStream(new File(outname))){
+		try(PrintStream printer2 = new PrintStream(new File(outname))){
 							
-			printer.println("Dataset, #Training, %Training, %Defect Training, %Defect Testing, Classifier, Balancing, FeatureSelection, TP, FP, TN, FN, Precision, "
-					+ "Recall, ROC Area, Kappa");
-							
-			printer.append("@relation " + project + "\n\n");
-			printer.append("@attribute Size numeric\n");
-			printer.append("@attribute LocTouched numeric\n");
-			printer.append("@attribute LocAdded numeric\n");
-			printer.append("@attribute MaxLocAdded numeric\n");
-			printer.append("@attribute AvgLocAdded numeric\n");
-			printer.append("@attribute nAuth numeric\n");
-			printer.append("@attribute nFix numeric\n");
-			printer.append("@attribute nR numeric\n");
-			printer.append("@attribute ChgSetSize numeric\n");
-			printer.append("@attribute Buggy {Yes, No}\n\n");
-			printer.append("@data\n");
-					
-					
-					
-					
-					
-					
-					
-					
-					
+			printer2.append("@relation " + project + "\n");
+			printer2.append("@attribute Size numeric\n");
+			printer2.append("@attribute LocTouched numeric\n");
+			printer2.append("@attribute LocAdded numeric\n");
+			printer2.append("@attribute MaxLocAdded numeric\n");
+			printer2.append("@attribute AvgLocAdded numeric\n");
+			printer2.append("@attribute nAuth numeric\n");
+			printer2.append("@attribute nFix numeric\n");
+			printer2.append("@attribute nR numeric\n");
+			printer2.append("@attribute ChgSetSize numeric\n");
+			printer2.append("@attribute Buggy {Si, No}\n");
+			printer2.append("@data\n");
+			
+			String line = null;
+			
+			br = new BufferedReader(new FileReader(path));
+			
+			while((line =br.readLine()) != null) {
 				
+				if(line.split(";")[0] == null || line.split(";")[0].startsWith("Release")) {
+					
+					continue;
+				}
+				
+				if(Integer.parseInt(line.split(";")[0]) <= release) {
+					
+					count++;
+					
+					countBuggy = countBuggy + addLine(printer2, line);
+					
+				}
+				
+				
+			}
+			
+			
+			result.add(count);
+			result.add(countBuggy);
+			
+			printer2.flush();	
+		
 		} catch(Exception e) {
 					
 			LOGGER.log(Level.SEVERE, "[ERROR]", e);
 				
-		}		
+		}	
+		
+		return result;
 		
 	}
-
+	
+	
+	public static int addLine(PrintStream file, String line) throws IOException {
+		
+		int countBuggy = 0;
+		
+		// Append the row readed from the CSV file, but without the first 2 column
+		
+		String[] array = line.split(";");
+		
+		for (int i = 2; i < array.length; i++) {
+		
+			if (i == array.length - 1) {
+			
+				if(array[i].equals("Si")) {
+					countBuggy ++;
+				}
+			
+				file.append(array[i] + "\n");
+			
+			} else {
+				
+				file.append(array[i] + ",");
+			}
+		}
+		return countBuggy;
+	}
 
 }

@@ -10,7 +10,12 @@
     <property name="source" value="9"/>
     <path id="ISW2Weka.classpath">
         <pathelement location="bin"/>
-        <pathelement location="weka-src.jar"/>
+        <pathelement location="SMOTE.jar"/>
+        <pathelement location="weka.jar"/>
+    </path>
+    <path id="run.Main (10).classpath">
+        <path refid="ISW2Weka.classpath"/>
+        <pathelement location="SMOTE.jar"/>
         <pathelement location="weka.jar"/>
     </path>
     <target name="init">
@@ -48,5 +53,10 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
+    </target>
+    <target name="Main (10)">
+        <java classname="deliverable.weka.Main" failonerror="true" fork="yes">
+            <classpath refid="run.Main (10).classpath"/>
+        </java>
     </target>
 </project>
