@@ -37,8 +37,6 @@ public class Main {
 				}
 			}
 			
-			sc.close();
-			
 		}catch(Exception e) {
 				
 			LOGGER.log(Level.SEVERE, "[ERROR]", e);

@@ -70,14 +70,14 @@ public final class WekaFunction {
 		testing.setClassIndex(numAttr - 1);		
 		
 		IBk cIBK = new IBk();
-		RandomForest RandomForest = new RandomForest();
-		NaiveBayes NaiveBaye = new NaiveBayes();
+		RandomForest randomForest = new RandomForest();
+		NaiveBayes naiveBaye = new NaiveBayes();
 
 		try {
 			
 			cIBK.buildClassifier(training);
-			RandomForest.buildClassifier(training);
-			NaiveBaye.buildClassifier(training);
+			randomForest.buildClassifier(training);
+			naiveBaye.buildClassifier(training);
 			
 		}catch(Exception e) {
 			
@@ -105,11 +105,11 @@ public final class WekaFunction {
 				result = setResult("IBK", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
-				eval.evaluateModel(RandomForest, testing);
+				eval.evaluateModel(randomForest, testing);
 				result = setResult("RandomForest", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
-				eval.evaluateModel(NaiveBaye, testing);
+				eval.evaluateModel(naiveBaye, testing);
 				result = setResult("NaiveBaye", sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
@@ -140,7 +140,7 @@ public final class WekaFunction {
 				/*Evaluation of RandomForest classifier*/
 				
 				eval = new Evaluation(testing);
-				overSamplingfc.setClassifier(RandomForest);
+				overSamplingfc.setClassifier(randomForest);
 				overSamplingfc.buildClassifier(training);
 				eval.evaluateModel(overSamplingfc, testing);
 				result = setResult("RandomForest", sampling, featureSelection, eval);
@@ -149,7 +149,7 @@ public final class WekaFunction {
 				/*Evaluation of NaiveBaye classifier*/
 
 				eval = new Evaluation(testing);
-				fc.setClassifier(NaiveBaye);
+				fc.setClassifier(naiveBaye);
 				fc.buildClassifier(training);
 				eval.evaluateModel(fc, testing);
 				result = setResult("NaiveBaye", sampling, featureSelection, eval);
@@ -182,7 +182,7 @@ public final class WekaFunction {
 				/*Evaluation of RandomForest classifier*/
 
 				eval = new Evaluation(testing);
-				fc.setClassifier(RandomForest);
+				fc.setClassifier(randomForest);
 				fc.buildClassifier(training);
 				eval.evaluateModel(fc, testing);
 				result = setResult("RandomForest", sampling, featureSelection, eval);
@@ -191,7 +191,7 @@ public final class WekaFunction {
 				/*Evaluation of NaiveBaye classifier*/
 
 				eval = new Evaluation(testing);
-				fc.setClassifier(NaiveBaye);
+				fc.setClassifier(naiveBaye);
 				fc.buildClassifier(training);
 				eval.evaluateModel(fc, testing);
 				result = setResult("NaiveBaye", sampling, featureSelection, eval);
@@ -221,7 +221,7 @@ public final class WekaFunction {
 				/*Evaluation of RandomForest classifier*/
 
 				eval = new Evaluation(testing);
-				fc.setClassifier(RandomForest);
+				fc.setClassifier(randomForest);
 				fc.buildClassifier(training);
 				eval.evaluateModel(fc, testing);
 				result = setResult("RandomForest", sampling, featureSelection, eval);
@@ -230,7 +230,7 @@ public final class WekaFunction {
 				/*Evaluation of NaiveBaye classifier*/
 
 				eval = new Evaluation(testing);
-				fc.setClassifier(NaiveBaye);			   
+				fc.setClassifier(naiveBaye);			   
 				fc.buildClassifier(training);			   
 				eval.evaluateModel(fc, testing);
 				result = setResult("NaiveBaye", sampling, featureSelection, eval);
@@ -242,28 +242,16 @@ public final class WekaFunction {
 	   return samplingResult;
 	}
 	
+
+
 	public static String setResult(String fc, String sampling, String featureSelection, Evaluation eval) {
 		
 		String result = null;
-		
-		switch(featureSelection) {
-		
-		case "Yes":
-			
-			result = fc + ";" + sampling + ";" + featureSelection + ";" + 
+	
+		result = fc + ";" + sampling + ";" + featureSelection + ";" + 
 					eval.numTruePositives(1)  + ";" + eval.numFalsePositives(1)  + "," + eval.numTrueNegatives(1)  + ";" + eval.numFalseNegatives(1)  + ";" +
 					eval.precision(1)  + ";" + eval.recall(1)  + ";" + eval.areaUnderROC(1)  + ";" + eval.kappa() + "\n";
-			
-			break;
-		
-		case "No":
-			
-			result = fc + ";" + sampling + ";" + featureSelection + ";" + 
-					eval.numTruePositives(1)  + ";" + eval.numFalsePositives(1)  + "," + eval.numTrueNegatives(1)  + ";" + eval.numFalseNegatives(1)  + ";" +
-					eval.precision(1)  + ";" + eval.recall(1)  + ";" + eval.areaUnderROC(1)  + ";" + eval.kappa() + "\n";
-			break;
-		}
-		
+					
 		return result;
 		
 	}

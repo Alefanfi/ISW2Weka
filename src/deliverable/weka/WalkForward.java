@@ -16,6 +16,8 @@ public class WalkForward {
 	private WalkForward() {}
 	
 	private static final Logger LOGGER = Logger.getLogger(WalkForward.class.getName());
+	
+	private static final String strError = "[ERROR]";
 
 	/* In walk-forward, the dataset is divided into parts
 	 * 
@@ -25,7 +27,7 @@ public class WalkForward {
 	 *  
 	 *  This function returns the result for the training part and get the number of buggy/no buggy */
 	
-	public static List<Integer> walkForwardTraining(String project, int release, String path) throws IOException{
+	public static List<Integer> walkForwardTraining(String project, int release, String path){
 		
 		List<Integer> result = new ArrayList<>();
 		
@@ -53,7 +55,7 @@ public class WalkForward {
 			
 		} catch(Exception e) {
 			
-		LOGGER.log(Level.SEVERE, "[ERROR]", e);
+		LOGGER.log(Level.SEVERE, strError, e);
 		
 		}
 		
@@ -100,9 +102,7 @@ public class WalkForward {
 				}
 					
 			}
-			
-			br.close();
-			
+
 			result.add(count);
 			result.add(countBuggy);
 			
@@ -110,7 +110,7 @@ public class WalkForward {
 		
 		}catch(Exception e) {
 			
-			LOGGER.log(Level.SEVERE, "[ERROR]", e);
+			LOGGER.log(Level.SEVERE, strError, e);
 			
 			}
 		
@@ -146,7 +146,7 @@ public class WalkForward {
 		
 		} catch(Exception e) {
 					
-			LOGGER.log(Level.SEVERE, "[ERROR]", e);
+			LOGGER.log(Level.SEVERE, strError, e);
 				
 		}	
 		
