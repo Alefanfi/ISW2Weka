@@ -42,7 +42,7 @@ public final class WekaFunction {
 	
 	private static final String ERRORE = "[ERROR]";
 	
-	public static List<String> applyFeatureSelection(Instances training, Instances testing, float percentClass) throws Exception {
+	public static List<String> applyFeatureSelection(Instances training, Instances testing, float percentClass) {
 		
 		//create AttributeSelection object
 		AttributeSelection filter = new AttributeSelection();

@@ -74,6 +74,7 @@ public class WekaResult {
 				List<String> samplingResult = WekaFunction.applySampling(noFilterTraining, testingNoFilter, percentClass, "No");
 				addResult(samplingResult, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
 				
+				LOGGER.info("Done!");
 
 			}
 		}catch(Exception e) {

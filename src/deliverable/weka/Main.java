@@ -1,6 +1,7 @@
 package deliverable.weka;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -17,7 +18,7 @@ public class Main {
 	
 	static List <String> release = new ArrayList<>();
 	
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws IOException {
 		
 		String project = PropertiesUtils.getProperty(ReadPropertyFile.PROJECT);
 		
