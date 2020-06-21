@@ -32,13 +32,13 @@ public final class WekaFunction {
 	
 	private static final String NAIVEBAYES = "NaiveBayes";
 	
-	static String noSampling = "NO SAMPLING";
+	private static final String NOSAMPLING = "NO SAMPLING";
 	
-	static String overSampling = "OVERSAMPLING";
+	private static final String OVERSAMPLING = "OVERSAMPLING";
 	
-	static String underSampling = "UNDERSAMPLING";
+	private static final String UNDERSAMPLING = "UNDERSAMPLING";
 	
-	static String SMOTE = "SMOTE";
+	private static final String SMOTE = "SMOTE";
 	
 	private static final String ERRORE = "[ERROR]";
 	
@@ -79,9 +79,7 @@ public final class WekaFunction {
 	
 	/* apply the balancing */
 	
-/* apply the balancing */
-	
-	public static List<String> applySampling(Instances training, Instances testing, float percentClass, String featureSelection) throws Exception {
+	public static List<String> applySampling(Instances training, Instances testing, float percentClass, String featureSelection) {
 
 		List<String> samplingResult = new ArrayList<>();
 	
@@ -117,13 +115,13 @@ public final class WekaFunction {
 				eval = new Evaluation(testing);
 				
 				eval.evaluateModel(cIBK, testing);
-				samplingResult.add(setResult(IBK, noSampling, featureSelection, eval));
+				samplingResult.add(setResult(IBK, NOSAMPLING, featureSelection, eval));
 				
 				eval.evaluateModel(randomForest, testing);
-				samplingResult.add(setResult(RANDOMFOREST, noSampling, featureSelection, eval));
+				samplingResult.add(setResult(RANDOMFOREST, NOSAMPLING, featureSelection, eval));
 				
 				eval.evaluateModel(naiveBayes, testing);
-				samplingResult.add(setResult(NAIVEBAYES, noSampling, featureSelection, eval));
+				samplingResult.add(setResult(NAIVEBAYES, NOSAMPLING, featureSelection, eval));
 			
 				/*Apply OVERSAMPLING*/
 				
@@ -137,17 +135,17 @@ public final class WekaFunction {
 				/*Evaluation of IBK classifier*/
 				
 				classifier(training, testing, eval, fc, cIBK);
-				samplingResult.add(setResult(IBK, overSampling, featureSelection, eval));
+				samplingResult.add(setResult(IBK, OVERSAMPLING, featureSelection, eval));
 				
 				/*Evaluation of RandomForest classifier*/
 			
 				classifier(training, testing, eval, fc, randomForest);
-				samplingResult.add(setResult(RANDOMFOREST, overSampling, featureSelection, eval));
+				samplingResult.add(setResult(RANDOMFOREST, OVERSAMPLING, featureSelection, eval));
 				
 				/*Evaluation of NaiveBaye classifier*/
 				
 				classifier(training, testing, eval, fc, naiveBayes);
-				samplingResult.add(setResult(NAIVEBAYES, overSampling, featureSelection, eval));
+				samplingResult.add(setResult(NAIVEBAYES, OVERSAMPLING, featureSelection, eval));
 				
 				/*Apply UNDERSAMPLING*/
 				
@@ -161,17 +159,17 @@ public final class WekaFunction {
 				/*Evaluation of IBK classifier*/
 				
 				classifier(training, testing, eval, fc, cIBK);
-				samplingResult.add(setResult(IBK, underSampling, featureSelection, eval));
+				samplingResult.add(setResult(IBK, UNDERSAMPLING, featureSelection, eval));
 				
 				/*Evaluation of RandomForest classifier*/
 				
 				classifier(training, testing, eval, fc, randomForest);
-				samplingResult.add(setResult(RANDOMFOREST, underSampling, featureSelection, eval));
+				samplingResult.add(setResult(RANDOMFOREST, UNDERSAMPLING, featureSelection, eval));
 				
 				/*Evaluation of NaiveBaye classifier*/
 
 				classifier(training, testing, eval, fc, naiveBayes);				
-				samplingResult.add(setResult(NAIVEBAYES, underSampling, featureSelection, eval));
+				samplingResult.add(setResult(NAIVEBAYES, UNDERSAMPLING, featureSelection, eval));
 				
 
 				/*SMOTE*/
@@ -208,6 +206,8 @@ public final class WekaFunction {
 	
 	}
 	
+	//Set the classifier to use
+	
 	public static Evaluation classifier(Instances training, Instances testing, Evaluation eval, FilteredClassifier fc, AbstractClassifier c){
 	
 		try {
@@ -227,8 +227,6 @@ public final class WekaFunction {
 		return eval;
 			
 	}
-
-
 
 	public static String setResult(String fc, String sampling, String featureSelection, Evaluation eval) {
 		
