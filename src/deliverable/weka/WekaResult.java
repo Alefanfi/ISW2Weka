@@ -17,14 +17,6 @@ public class WekaResult {
 	static List<Integer> resultTraining;
 	static List<Integer> resultTesting;
 	
-	static String noSampling = "NO SAMPLING";
-	
-	static String overSampling = "OVERSAMPLING";
-	
-	static String underSampling = "UNDERSAMPLING";
-	
-	static String smote = "SMOTE";
-	
 	private WekaResult() {}
 	
 	public static void printResult(String project, List<String> release, String path) {
@@ -74,31 +66,14 @@ public class WekaResult {
 				
 				/* apply feature selection before the sampling*/
 				
-				List<String> featureSelectionResultNoSampling = WekaFunction.applyFeatureSelection(noFilterTraining, testingNoFilter, percentClass, noSampling);
-				addResult(featureSelectionResultNoSampling, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
-				
-				List<String> featureSelectionResultOverSampling = WekaFunction.applyFeatureSelection(noFilterTraining, testingNoFilter, percentClass, overSampling);
-				addResult(featureSelectionResultOverSampling, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
-				
-				List<String> featureSelectionResultUnderSampling = WekaFunction.applyFeatureSelection(noFilterTraining, testingNoFilter, percentClass, underSampling);
-				addResult(featureSelectionResultUnderSampling, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
-				
-				List<String> featureSelectionResultSmote = WekaFunction.applyFeatureSelection(noFilterTraining, testingNoFilter, percentClass, smote);
-				addResult(featureSelectionResultSmote, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
+				List<String> featureSelectionResult = WekaFunction.applyFeatureSelection(noFilterTraining, testingNoFilter, percentClass);
+				addResult(featureSelectionResult, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
 				
 				/* apply only the sampling without the feature selection*/
 				
-				List<String> noSamplingResult = WekaFunction.applySampling(noFilterTraining, testingNoFilter, percentClass, noSampling, "No");
-				addResult(noSamplingResult, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
+				List<String> samplingResult = WekaFunction.applySampling(noFilterTraining, testingNoFilter, percentClass, "No");
+				addResult(samplingResult, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
 				
-				List<String> overSamplingResult = WekaFunction.applySampling(noFilterTraining, testingNoFilter, percentClass, overSampling, "No");
-				addResult(overSamplingResult, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
-				
-				List<String> underSamplingResult = WekaFunction.applySampling(noFilterTraining, testingNoFilter, percentClass, underSampling, "No");
-				addResult(underSamplingResult, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
-				
-				List<String> smoteResult = WekaFunction.applySampling(noFilterTraining, testingNoFilter, percentClass, smote, "No");
-				addResult(smoteResult, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
 
 			}
 		}catch(Exception e) {
