@@ -16,7 +16,7 @@ public class WalkForward {
 	
 	private static final Logger LOGGER = Logger.getLogger(WalkForward.class.getName());
 	
-	private static final String errore = "[ERROR]";
+	private static final String ERRORE = "[ERROR]";
 
 	/* In walk-forward, the dataset is divided into parts
 	 * 
@@ -54,7 +54,7 @@ public class WalkForward {
 			
 		} catch(Exception e) {
 			
-		LOGGER.log(Level.SEVERE, errore, e);
+		LOGGER.log(Level.SEVERE, ERRORE, e);
 		
 		}
 		
@@ -109,7 +109,7 @@ public class WalkForward {
 		
 		}catch(Exception e) {
 			
-			LOGGER.log(Level.SEVERE, errore, e);
+			LOGGER.log(Level.SEVERE, ERRORE, e);
 			
 			}
 		
@@ -145,7 +145,7 @@ public class WalkForward {
 		
 		} catch(Exception e) {
 					
-			LOGGER.log(Level.SEVERE, errore, e);
+			LOGGER.log(Level.SEVERE, ERRORE, e);
 				
 		}	
 		
