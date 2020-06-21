@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import weka.attributeSelection.CfsSubsetEval;
 import weka.attributeSelection.GreedyStepwise;
+import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.lazy.IBk;
@@ -69,6 +70,8 @@ public final class WekaFunction {
 	
 	/* apply the balancing */
 	
+/* apply the balancing */
+	
 	public static List<String> applySampling(Instances training, Instances testing, float percentClass, String sampling, String featureSelection) throws Exception {
 
 		List<String> samplingResult = new ArrayList<>();
@@ -79,13 +82,13 @@ public final class WekaFunction {
 		
 		IBk cIBK = new IBk();
 		RandomForest randomForest = new RandomForest();
-		NaiveBayes naiveBaye = new NaiveBayes();
+		NaiveBayes naiveBayes = new NaiveBayes();
 
 		try {
 			
 			cIBK.buildClassifier(training);
 			randomForest.buildClassifier(training);
-			naiveBaye.buildClassifier(training);
+			naiveBayes.buildClassifier(training);
 			
 		}catch(Exception e) {
 			
@@ -115,7 +118,7 @@ public final class WekaFunction {
 				result = setResult(RANDOMFOREST, sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
-				eval.evaluateModel(naiveBaye, testing);
+				eval.evaluateModel(naiveBayes, testing);
 				result = setResult(NAIVEBAYES, sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
@@ -136,16 +139,16 @@ public final class WekaFunction {
 
 				eval = new Evaluation(testing);
 				
-				classifier(training, testing, IBK, eval,  fc);
+				classifier(training, testing, eval, fc, cIBK);
 				
-				result = setResult("IBK", sampling, featureSelection, eval);
+				result = setResult(IBK, sampling, featureSelection, eval);
 				samplingResult.add(result);
 				
 				/*Evaluation of RandomForest classifier*/
 				
 				eval = new Evaluation(testing);
 				
-				classifier(training, testing, RANDOMFOREST, eval,  fc);
+				classifier(training, testing, eval, fc, randomForest);
 				
 				result = setResult(RANDOMFOREST, sampling, featureSelection, eval);
 				samplingResult.add(result);
@@ -154,7 +157,7 @@ public final class WekaFunction {
 
 				eval = new Evaluation(testing);
 				
-				classifier(training, testing, NAIVEBAYES, eval,  fc);
+				classifier(training, testing, eval, fc, naiveBayes);
 				
 				result = setResult(NAIVEBAYES, sampling, featureSelection, eval);
 				samplingResult.add(result);
@@ -178,7 +181,7 @@ public final class WekaFunction {
 
 				eval = new Evaluation(testing);
 				
-				classifier(training, testing, IBK, eval,  fc);
+				classifier(training, testing, eval, fc, cIBK);
 				
 				result = setResult(IBK, sampling, featureSelection, eval);
 				samplingResult.add(result);
@@ -187,7 +190,7 @@ public final class WekaFunction {
 
 				eval = new Evaluation(testing);
 				
-				classifier(training, testing, RANDOMFOREST, eval,  fc);
+				classifier(training, testing, eval, fc, randomForest);
 				
 				result = setResult(RANDOMFOREST, sampling, featureSelection, eval);
 				samplingResult.add(result);
@@ -196,7 +199,7 @@ public final class WekaFunction {
 
 				eval = new Evaluation(testing);
 				
-				classifier(training, testing, NAIVEBAYES, eval,  fc);
+				classifier(training, testing, eval, fc, naiveBayes);
 				
 				result = setResult(NAIVEBAYES, sampling, featureSelection, eval);
 				samplingResult.add(result);
@@ -217,7 +220,7 @@ public final class WekaFunction {
 
 				eval = new Evaluation(testing);
 				
-				classifier(training, testing, IBK, eval,  fc);
+				classifier(training, testing, eval, fc, cIBK);
 				
 				result = setResult("IBK", sampling, featureSelection, eval);
 				samplingResult.add(result);
@@ -226,7 +229,7 @@ public final class WekaFunction {
 
 				eval = new Evaluation(testing);
 				
-				classifier(training, testing, RANDOMFOREST, eval,  fc);
+				classifier(training, testing, eval, fc, randomForest);
 				
 				result = setResult(RANDOMFOREST, sampling, featureSelection, eval);
 				samplingResult.add(result);
@@ -235,7 +238,7 @@ public final class WekaFunction {
 
 				eval = new Evaluation(testing);
 				
-				classifier(training, testing, NAIVEBAYES, eval,  fc);
+				classifier(training, testing, eval, fc, naiveBayes);
 				
 				result = setResult(NAIVEBAYES, sampling, featureSelection, eval);
 				samplingResult.add(result);
@@ -252,58 +255,18 @@ public final class WekaFunction {
 	
 	}
 	
-	public static void classifier(Instances training, Instances testing, String c, Evaluation eval, FilteredClassifier fc) throws Exception {
+	public static Evaluation classifier(Instances training, Instances testing, Evaluation eval, FilteredClassifier fc, AbstractClassifier c) throws Exception {
+	
+		fc.setClassifier(c);
 		
-		IBk cIBK = new IBk();
-		RandomForest randomForest = new RandomForest();
-		NaiveBayes naiveBayes = new NaiveBayes();
-
-		try {
-			
-			cIBK.buildClassifier(training);
-			randomForest.buildClassifier(training);
-			naiveBayes.buildClassifier(training);
-			
-		}catch(Exception e) {
-			
-			LOGGER.log(Level.SEVERE, "[ERROR]", e);
+		fc.buildClassifier(training);
 		
-		}
-		
-		switch(c) {
-		
-		case IBK:
+		eval.evaluateModel(fc, testing);
 			
-			fc.setClassifier(cIBK);
-			fc.buildClassifier(training);
-			eval.evaluateModel(fc, testing);
+		return eval;
 			
-			break;
-			
-		case RANDOMFOREST:
-			
-			fc.setClassifier(randomForest);
-			fc.buildClassifier(training);
-			eval.evaluateModel(fc, testing);
-			
-			break;
-		
-		case NAIVEBAYES:
-			
-			fc.setClassifier(naiveBayes);
-			fc.buildClassifier(training);
-			eval.evaluateModel(fc, testing);
-			
-			break;
-			
-		default: 
-			break;
-		
-		}
-		
-		
-		
 	}
+
 
 
 	public static String setResult(String fc, String sampling, String featureSelection, Evaluation eval) {
