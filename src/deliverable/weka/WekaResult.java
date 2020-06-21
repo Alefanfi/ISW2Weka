@@ -44,11 +44,7 @@ public class WekaResult {
 				
 				//compute the value of #Training, %Training, %DefectTraining, %DefectTesting,
 				
-				int totalData = resultTraining.get(0) + resultTesting.get(0);
-				
-				/* trainingPerc = repporto tra dati totali del training e dati totali tra training e test*/
-				
-				float trainingPerc = resultTraining.get(0)/(float)totalData;
+				float trainingPerc = resultTraining.get(0)/(float)(resultTraining.get(0) + resultTesting.get(0));
 				float defectiveTesting = resultTesting.get(1)/(float)resultTesting.get(0);
 				float defectiveTraining = resultTraining.get(1)/(float)resultTraining.get(0);
 				
@@ -73,15 +69,16 @@ public class WekaResult {
 				
 				List<String> samplingResult = WekaFunction.applySampling(noFilterTraining, testingNoFilter, percentClass, "No");
 				addResult(samplingResult, trainingPerc, defectiveTesting, defectiveTraining, project, i, printer);
-				
-				LOGGER.info("Done!");
 
 			}
+		
 		}catch(Exception e) {
 			
 			LOGGER.log(Level.SEVERE, "[ERROR]", e);
 		
 		}
+		
+		LOGGER.info("Done!");
 		
 	}
 	

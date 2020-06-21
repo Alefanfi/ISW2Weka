@@ -81,7 +81,7 @@ public class WalkForward {
 				
 				if(t) {
 					
-					if(Integer.parseInt(line.split(";")[0]) <= release) {
+					if(Integer.parseInt(line.split(";")[0]) < release) {
 						
 						count++;
 						
@@ -141,7 +141,7 @@ public class WalkForward {
 			printer2.append("@data\n");
 			
 			
-			openOldFile(path, printer2, release, result, true);
+			openOldFile(path, printer2, release, result, false);
 		
 		} catch(Exception e) {
 					

@@ -233,7 +233,7 @@ public final class WekaFunction {
 		String result = null;
 	
 		result = fc + ";" + sampling + ";" + featureSelection + ";" + 
-					eval.numTruePositives(1)  + ";" + eval.numFalsePositives(1)  + "," + eval.numTrueNegatives(1)  + ";" + eval.numFalseNegatives(1)  + ";" +
+					eval.numTruePositives(1)  + ";" + eval.numFalsePositives(1)  + ";" + eval.numTrueNegatives(1)  + ";" + eval.numFalseNegatives(1)  + ";" +
 					eval.precision(1)  + ";" + eval.recall(1)  + ";" + eval.areaUnderROC(1)  + ";" + eval.kappa() + "\n";
 					
 		return result;
