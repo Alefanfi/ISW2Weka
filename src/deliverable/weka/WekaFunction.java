@@ -44,9 +44,8 @@ public final class WekaFunction {
 	
 	public static List<String> applyFeatureSelection(Instances training, Instances testing, double percentClass) {
 		
-		Instances filteredTraining = null;
-		Instances testingFiltered = null;
-		
+		List<String> r = new ArrayList<>();
+
 		//create AttributeSelection object
 		AttributeSelection filter = new AttributeSelection();
 		
@@ -64,21 +63,22 @@ public final class WekaFunction {
 		try {
 			
 			filter.setInputFormat(training);
-			filteredTraining =  Filter.useFilter(training, filter);
-			testingFiltered = Filter.useFilter(testing, filter);
+			Instances filteredTraining =  Filter.useFilter(training, filter);
+			Instances testingFiltered = Filter.useFilter(testing, filter);
 			int numAttrFiltered = filteredTraining.numAttributes();
 			filteredTraining.setClassIndex(numAttrFiltered - 1);
 			testingFiltered.setClassIndex(numAttrFiltered - 1);
+			
+			return applySampling(filteredTraining, testingFiltered, percentClass, "Yes");
 			
 			
 		}catch(Exception e) {
 			
 			LOGGER.log(Level.SEVERE, ERRORE, e);
 			
+			return r;
 			
 		}
-		
-		return applySampling(filteredTraining, testingFiltered, percentClass, "Yes");
 
 	}
 	
