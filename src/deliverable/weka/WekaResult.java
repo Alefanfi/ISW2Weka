@@ -44,11 +44,11 @@ public class WekaResult {
 				
 				//compute the value of #Training, %Training, %DefectTraining, %DefectTesting,
 				
-				float trainingPerc = resultTraining.get(0)/(float)(resultTraining.get(0) + resultTesting.get(0));
-				float defectiveTesting = resultTesting.get(1)/(float)resultTesting.get(0);
-				float defectiveTraining = resultTraining.get(1)/(float)resultTraining.get(0);
+				double trainingPerc = resultTraining.get(0)/(double)(resultTraining.get(0) + resultTesting.get(0));
+				double defectiveTesting = resultTesting.get(1)/(double)resultTesting.get(0);
+				double defectiveTraining = resultTraining.get(1)/(double)resultTraining.get(0);
 				
-				float percentClass = 1 - ( (resultTraining.get(1) + resultTesting.get(1)) / (float)(resultTraining.get(0) + resultTesting.get(0)));		
+				double percentClass = 1 - ( (resultTraining.get(1) + resultTesting.get(1)) / (double)(resultTraining.get(0) + resultTesting.get(0)));		
 				
 				// Create the ARFF file for testing, with the i+1 version
 				
@@ -84,7 +84,7 @@ public class WekaResult {
 	
 	/* take the list of result of the function and build the raw that will be append to the csv file */
 
-	private static void addResult(List<String> result, float trainingPerc, float defectiveTesting, float defectiveTraining, String project, int i, PrintStream printer) {
+	private static void addResult(List<String> result, double trainingPerc, double defectiveTesting, double defectiveTraining, String project, int i, PrintStream printer) {
 		
 		for(int j = 0; j < result.size(); j++) {
 			

@@ -42,7 +42,7 @@ public final class WekaFunction {
 	
 	private static final String ERRORE = "[ERROR]";
 	
-	public static List<String> applyFeatureSelection(Instances training, Instances testing, float percentClass) {
+	public static List<String> applyFeatureSelection(Instances training, Instances testing, double percentClass) {
 		
 		//create AttributeSelection object
 		AttributeSelection filter = new AttributeSelection();
@@ -67,20 +67,22 @@ public final class WekaFunction {
 			filteredTraining.setClassIndex(numAttrFiltered - 1);
 			testingFiltered.setClassIndex(numAttrFiltered - 1);
 			
+
+			return applySampling(filteredTraining, testingFiltered, percentClass, "Yes");
+			
 		}catch(Exception e) {
 			
 			LOGGER.log(Level.SEVERE, ERRORE, e);
+			return null;
 			
 		}
-		
-		return applySampling(training, testing, percentClass, "Yes");
 
 	}
 	
 	/* apply the balancing */
 	
-	public static List<String> applySampling(Instances training, Instances testing, float percentClass, String featureSelection) {
-
+	public static List<String> applySampling(Instances training, Instances testing, double percentClass, String featureSelection) {
+		
 		List<String> samplingResult = new ArrayList<>();
 	
 		int numAttr = training.numAttributes();
